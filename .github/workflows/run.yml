@@ -1,0 +1,26 @@
+name: Analyze Matches
+
+on:
+  workflow_dispatch:  # Позволяет запускать вручную
+  schedule:
+    - cron: '0 12 * * *'  # Каждый день в 12:00 по UTC
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Клонировать репозиторий
+        uses: actions/checkout@v3
+
+      - name: Установить Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Установить зависимости
+        run: pip install -r requirements.txt
+
+      - name: Запустить анализ
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+        run: python main.py
